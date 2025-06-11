@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - Kaymay Services{% endblock %}
+
+{% block extra_css %}
+<style>
+  .blog-page .blog-card {
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .blog-page .blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .blog-page .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+  }
+  .blog-page .badge-category {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    font-weight: 500;
+  }
+  .post-meta {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+  .card-body {
+    padding: 1.5rem;
+  }
+  .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #2c3e50;
+  }
+  .card-text {
+    color: #495057;
+    margin-bottom: 1.5rem;
+  }
+  .read-time {
+    font-size: 0.8rem;
+  }
+  .featured-post {
+    border-left: 4px solid #007bff;
+  }
+  .category-filter .btn {
+    margin: 2px;
+    border-radius: 20px;
+  }
+  .search-box {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="blog-page py-5">
+  <div class="container">
+    <!-- Page Header -->
+    <div class="row mb-5">
+      <div class="col-lg-10 mx-auto text-center">
+        <h1 class="display-4 mb-3">Notre Blog</h1>
+        <p class="lead">Découvrez nos dernières actualités et réalisations</p>
+      </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="row mb-4">
+      <div class="col-md-8 mx-auto">
+        <form method="GET" action="{{ url_for('views.blog') }}" class="search-box">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Rechercher un article..." value="{{ request.args.get('q', '') }}">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="category-filter text-center">
+          <a href="{{ url_for('views.blog') }}" class="btn btn-sm {{ 'btn-primary' if not active_category else 'btn-outline-secondary' }}">Tous</a>
+          {% for category in categories %}
+          <a href="{{ url_for('views.blog', category=category) }}" class="btn btn-sm {{ 'btn-primary' if active_category == category else 'btn-outline-secondary' }}">
+            {{ category }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Post -->
+    {% if featured_post %}
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="card featured-post border-0 shadow-lg mb-4">
+          <div class="row no-gutters">
+            <div class="col-md-6">
+              <img src="{{ url_for('static', filename='uploads/blog/' + featured_post.image_file) }}" 
+                   class="card-img h-100" 
+                   alt="{{ featured_post.titre }}">
+            </div>
+            <div class="col-md-6">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="badge badge-primary">{{ featured_post.category|default('Général') }}</span>
+                  <small class="text-muted">{{ featured_post.date_posted.strftime('%d %B %Y') }}</small>
+                </div>
+                <h2 class="card-title">{{ featured_post.titre }}</h2>
+                <p class="card-text">{{ featured_post.soustitre }}</p>
+                <div class="d-flex align-items-center mt-4">
+                  <div>
+                    {% if featured_post.auteur %}
+                    <small class="d-block">Par {{ featured_post.auteur }}</small>
+                    {% endif %}
+                    <small class="text-muted">{{ (featured_post.contenu|length / 1200)|round|int }} min de lecture</small>
+                  </div>
+                </div>
+                <a href="{{ url_for('views.detail', id_post=featured_post.id) }}" class="btn btn-primary mt-3">Lire l'article</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Blog Posts Grid -->
+    <div class="row">
+      {% for post in posts.items %}
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card blog-card h-100 shadow-sm">
+          {% if post.image_file %}
+          <div class="position-relative">
+            <img src="{{ url_for('static', filename='uploads/blog/' + post.image_file) }}" 
+                 class="card-img-top" 
+                 alt="{{ post.titre }}">
+            <span class="badge badge-category text-white position-absolute">
+              {{ post.category|default('Général') }}
+            </span>
+          </div>
+          {% endif %}
+          
+          <div class="card-body">
+            <div class="post-meta d-flex justify-content-between mb-2">
+              <span>{{ post.date_posted.strftime('%d %B %Y') }}</span>
+              <span><i class="fa fa-eye mr-1"></i> {{ post.views|default(0) }}</span>
+            </div>
+            
+            <h5 class="card-title">{{ post.titre }}</h5>
+            
+            {% if post.soustitre %}
+            <p class="card-text">{{ post.soustitre|truncate(150) }}</p>
+            {% endif %}
+          </div>
+          
+          <div class="card-footer bg-white border-0 pt-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="{{url_for('views.detail', id_post=post.id)}}" 
+                 class="btn btn-sm btn-outline-primary">
+                Lire plus
+              </a>
+              <small class="read-time text-muted">
+                {{ (post.contenu|length / 1200)|round|int }} min de lecture
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-5">
+      <ul class="pagination justify-content-center">
+        {% if posts.has_prev %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('views.blog', page=posts.prev_num, q=request.args.get('q'), category=active_category) }}">Précédent</a>
+          </li>
+        {% endif %}
+        
+        {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+          {% if page_num %}
+            <li class="page-item {% if page_num == posts.page %}active{% endif %}">
+              <a class="page-link" href="{{ url_for('views.blog', page=page_num, q=request.args.get('q'), category=active_category) }}">{{ page_num }}</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+          {% endif %}
+        {% endfor %}
+        
+        {% if posts.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('views.blog', page=posts.next_num, q=request.args.get('q'), category=active_category) }}">Suivant</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Animation des cartes au scroll
+  document.addEventListener('DOMContentLoaded', function() {
+    const animateOnScroll = function() {
+      const cards = document.querySelectorAll('.blog-card');
+      cards.forEach(card => {
+        const cardPosition = card.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.3;
+        
+        if(cardPosition < screenPosition) {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }
+      });
+    };
+    
+    // Initial state
+    const cards = document.querySelectorAll('.blog-card');
+    cards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'all 0.5s ease';
+    });
+    
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll(); // Trigger on load
+  });
+</script>
+{% endblock %}

@@ -12,7 +12,7 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  <title>Kaymay Accueil</title>
+  <title>Kaymay Services| Accueil</title>
 
   <!-- slider stylesheet -->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
@@ -38,13 +38,13 @@
             <a href="">
               <i class="fa fa-phone" aria-hidden="true"></i>
               <span>
-                Call : +243 81 88 48 797
+                Call :{{config.phone}}
               </span>
             </a>
             <a href="">
               <i class="fa fa-envelope" aria-hidden="true"></i>
               <span>
-                Email : info@kaymayservices.com
+                Email : {{config.email}}
               </span>
             </a>
           </div>
@@ -55,7 +55,7 @@
           <nav class="navbar navbar-expand-lg custom_nav-container ">
             <a class="navbar-brand" href="{{url_for('views.index')}}">
               <span>
-                <img src="static/images/logo.jpeg" alt="" width="250" height="180">
+                <img src="static/images/logo_1.png" alt="" width="80" height="100">
               </span>
             </a>
 
@@ -68,15 +68,27 @@
                 <li class="nav-item active">
                   <a class="nav-link" href="{{url_for('views.index')}}">Accueil <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url_for('views.about')}}"> Appropos</a>
+                <li class="nav-item {% if request.endpoint == 'views.about' %}active{% endif %}">
+                  <a class="nav-link" href="{{url_for('views.about')}}"> A-propos</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% if request.endpoint == 'views.services' %}active{% endif %}">
                   <a class="nav-link" href="{{url_for('views.service')}}">Services</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% if request.endpoint == 'views.contact' %}active{% endif %}">
                   <a class="nav-link" href="{{url_for('views.contact')}}">Contact</a>
                 </li>
+                <li class="nav-item {% if request.endpoint == 'views.blog' %}active{% endif %}">
+                  <a class="nav-link" href="{{url_for('views.blog')}}">Blog</a>
+                </li>
+                {% if current_user.is_authenticated%}
+                <li class="nav-item {% if request.endpoint == 'views.dashboard' %}active{% endif %}">
+                  <a class="nav-link" href="{{url_for('views.dashboard')}}">dashboard</a>
+                </li>
+                {%else%}
+                <li class="nav-item {% if request.endpoint == 'auth.login' %}active{% endif %}">
+                  <a class="nav-link" href="{{url_for('auth.login')}}">Login</a>
+                </li>
+                {%endif%}
               </ul>
             </div>
           </nav>
@@ -135,7 +147,7 @@
             Reparation
           </h5>
         </div>
-        <div class="box active">
+        <div class="box">
           <div class="img-box">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512">
               <g id="paint-painted-paint_roller-home-house" data-name="paint-painted-paint roller-home-house">
@@ -172,10 +184,10 @@
         <div class="col-lg-5 col-md-6">
           <div class="detail-box">
             <h2>
-              Appropos de nous
+              A-propos de nous
             </h2>
             <p>
-              Kaymay Services est votre partenaire de confiance pour tous vos besoins en construction, rénovation et design de bâtiments. Notre équipe expérimentée et passionnée s'engage à offrir des services de haute qualité, que ce soit pour la construction de nouveaux bâtiments, la rénovation de propriétés existantes ou la conception architecturale. Nous mettons l'accent sur l'innovation, la durabilité et la satisfaction du client, en veillant à ce que chaque projet reflète vos besoins et votre vision. Faites confiance à Kaymay Services pour réaliser vos projets de construction et de rénovation avec expertise et professionnalisme, tout en apportant une touche de design unique à chaque réalisation."
+              {{ site_config.about_content }}
             </p>
             <a href="">
               Plus
@@ -184,7 +196,7 @@
         </div>
         <div class="col-lg-7 col-md-6">
           <div class="img-box">
-            <img src="static/images/p3.jpeg" alt="">
+            <img src="{{ url_for('static', filename='uploads/config/' + site_config.about_image) }}" alt="">
           </div>
         </div>
       </div>
@@ -313,28 +325,28 @@
           <div class="item">
             <div class="box">
               <div class="img">
-                <img src="static/images/p1.jpeg" alt="" class="img-fluid w-100" style="height: 25rem;">
+                <img src="{{ url_for('static', filename='uploads/config/' + site_config.portfolio_1_image) }}" alt="" class="img-fluid w-100" style="height: 25rem;">
               </div>
             </div>
           </div>
           <div class="item">
             <div class="box">
               <div class="img">
-                <img src="static/images/p2.jpeg" alt="" class="img-fluid w-100" style="height: 25rem;">
+                <img src="{{ url_for('static', filename='uploads/config/' + site_config.portfolio_2_image) }}" alt="" class="img-fluid w-100" style="height: 25rem;">
               </div>
             </div>
           </div>
           <div class="item">
             <div class="box">
               <div class="img">
-                <img src="static/images/p3.jpeg" alt="" class="img-fluid w-100" style="height: 25rem;">
+                <img src="{{ url_for('static', filename='uploads/config/' + site_config.portfolio_3_image) }}" alt="" class="img-fluid w-100" style="height: 25rem;">
               </div>
             </div>
           </div>
           <div class="item">
             <div class="box">
               <div class="img">
-                <img src="static/images/p4.jpeg" alt="" class="img-fluid w-100" style="height: 25rem;">
+                <img src="{{ url_for('static', filename='uploads/config/' + site_config.portfolio_4_image) }}" alt="" class="img-fluid w-100" style="height: 25rem;">
               </div>
             </div>
           </div>
@@ -409,7 +421,7 @@
                       <i class="fa fa-map-marker" aria-hidden="true"></i>
                     </div>
                     <p>
-                      lubilanshi 407
+                      {{config.address}}
                     </p>
                   </div>
                 </a>
@@ -421,7 +433,7 @@
                       <i class="fa fa-phone" aria-hidden="true"></i>
                     </div>
                     <p>
-                      +243 81 88 48 797
+                      +243 {{config.phone}}
                     </p>
                   </div>
                 </a>
@@ -433,7 +445,7 @@
                       <i class="fa fa-envelope" aria-hidden="true"></i>
                     </div>
                     <p>
-                      info@kaymayservices.com
+                      {{config.email}}
                     </p>
                   </div>
                 </a>

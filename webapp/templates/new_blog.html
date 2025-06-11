@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}Kaymay Services - Nouvel Article{% endblock %}
+
+{% block extra_css %}
+<style>
+    .preview-container {
+        display: none;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .preview-image {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-title {
+        color: #2c3e50;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .ck-editor__editable {
+        min-height: 200px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-container">
+                <h3 class="form-title text-center">
+                    <i class="fa fa-plus-circle"></i> Créer un Nouvel Article
+                </h3>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages%}
+
+                {% for category, message in messages%}
+
+                <div class="alert alert-{{category}} alert-dismissible" role="alert">
+                    {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+                </div>
+
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('views.addblog') }}" method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-4">
+                        <label class="form-label">Titre de l'article</label>
+                        {{ form.titre(class="form-control p-3", placeholder="Entrez un titre accrocheur") }}
+                        {% if form.titre.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.titre.errors[0] }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Sous-titre</label>
+                        {{ form.soustitre(class="form-control p-3", placeholder="Un bref résumé de l'article") }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Auteur</label>
+                        {{ form.auteur(class="form-control p-3", placeholder="Nom de l'auteur") }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Contenu</label>
+                        {{ form.contenu(class="form-control p-3", id="editor", placeholder="Rédigez votre contenu ici")
+                        }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Image principale</label>
+                        {{ form.image(class="form-control p-2", id="imageUpload", accept="image/*") }}
+                        <small class="text-muted">Format recommandé : 1200x630 pixels</small>
+
+                        <div id="imagePreview" class="preview-container mt-3">
+                            <h6>Aperçu de l'image :</h6>
+                            <img src="#" alt="Aperçu de l'image" class="preview-image img-fluid mb-2">
+                            <button type="button" id="removeImage" class="btn btn-sm btn-outline-danger">
+                                <i class="fa fa-trash"></i> Changer l'image
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        {{ form.submit(class="btn btn-primary btn-submit p-3") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+
+{% block extra_js %}
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<script>
+    // Initialisation de CKEditor
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraphe' },
+                    { model: 'heading2', view: 'h2', title: 'Titre 2' },
+                    { model: 'heading3', view: 'h3', title: 'Titre 3' }
+                ]
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    // Aperçu de l'image avant upload
+    document.getElementById('imageUpload').addEventListener('change', function (event) {
+        const [file] = event.target.files;
+        if (file) {
+            const preview = document.getElementById('imagePreview');
+            const imgPreview = preview.querySelector('img');
+
+            imgPreview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    });
+
+    // Suppression de l'aperçu
+    document.getElementById('removeImage').addEventListener('click', function () {
+        const input = document.getElementById('imageUpload');
+        const preview = document.getElementById('imagePreview');
+
+        input.value = '';
+        preview.style.display = 'none';
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - Kaymay Services{% endblock %}
+
+{% block extra_css %}
+<style>
+    .config-card {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    }
+    .image-preview-container {
+        margin-top: 1rem;
+    }
+    .image-preview {
+        max-height: 150px;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+    }
+    .section-title {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="config-card card">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Configuration du Site</h2>
+            
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                
+                <div class="mb-4">
+                    <h4 class="section-title">Informations Entreprise</h4>
+                    <div class="mb-3">
+                        {{ form.company_name.label(class="form-label") }}
+                        {{ form.company_name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.address.label(class="form-label") }}
+                        {{ form.address(class="form-control", rows=3) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.about_content.label(class="form-label") }}
+                        {{ form.about_content(class="form-control", rows=5) }}
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="section-title">Gestion des Images</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.accueil_image.label(class="form-label") }}
+                            {{ form.accueil_image(class="form-control") }}
+                            {% if config.accueil_image %}
+                            <div class="image-preview-container">
+                                <img src="{{ url_for('static', filename='uploads/config/' + config.accueil_image) }}" 
+                                     class="image-preview img-thumbnail">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.about_image.label(class="form-label") }}
+                            {{ form.about_image(class="form-control") }}
+                            {% if config.about_image %}
+                            <div class="image-preview-container">
+                                <img src="{{ url_for('static', filename='uploads/config/' + config.about_image) }}" 
+                                     class="image-preview img-thumbnail">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.contact_image.label(class="form-label") }}
+                            {{ form.contact_image(class="form-control") }}
+                            {% if config.contact_image %}
+                            <div class="image-preview-container">
+                                <img src="{{ url_for('static', filename='uploads/config/' + config.contact_image) }}" 
+                                     class="image-preview img-thumbnail">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.portfolio_1_image.label(class="form-label") }}
+                            {{ form.portfolio_1_image(class="form-control") }}
+                            {% if config.portfolio_1_image %}
+                            <div class="image-preview-container">
+                                <img src="{{ url_for('static', filename='uploads/config/' + config.portfolio_1_image) }}" 
+                                     class="image-preview img-thumbnail">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.portfolio_2_image.label(class="form-label") }}
+                            {{ form.portfolio_2_image(class="form-control") }}
+                            {% if config.portfolio_2_image %}
+                            <div class="image-preview-container">
+                                <img src="{{ url_for('static', filename='uploads/config/' + config.portfolio_2_image) }}" 
+                                     class="image-preview img-thumbnail">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.portfolio_3_image.label(class="form-label") }}
+                            {{ form.portfolio_3_image(class="form-control") }}
+                            {% if config.portfolio_3_image %}
+                            <div class="image-preview-container">
+                                <img src="{{ url_for('static', filename='uploads/config/' + config.portfolio_3_image) }}" 
+                                     class="image-preview img-thumbnail">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.portfolio_4_image.label(class="form-label") }}
+                            {{ form.portfolio_4_image(class="form-control") }}
+                            {% if config.portfolio_4_image %}
+                            <div class="image-preview-container">
+                                <img src="{{ url_for('static', filename='uploads/config/' + config.portfolio_4_image) }}" 
+                                     class="image-preview img-thumbnail">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

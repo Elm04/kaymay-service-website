@@ -89,7 +89,7 @@ a:focus {
 
 .header_section .header_top {
   padding: 15px 0;
-  background-color: #000000;
+  background-color: #04a4b4;
 }
 
 .header_section .header_top .contact_nav {
@@ -106,7 +106,7 @@ a:focus {
 }
 
 .header_section .header_top .contact_nav a i {
-  color: #ff8a1d;
+  color: #d5bc71;
 }
 
 .header_section .header_bottom {
@@ -311,8 +311,8 @@ a:focus {
   font-family: 'Merriweather Sans', sans-serif;
   text-transform: uppercase;
   padding: 10px 45px;
-  background-color: #ff8a1d;
-  border: 1px solid #ff8a1d;
+  background-color: #d5bc71;
+  border: 1px solid #d5bc71;
   border-radius: 5px;
   color: #ffffff;
   margin-top: 15px;
@@ -389,7 +389,7 @@ a:focus {
 }
 
 .feature_section .feature_container .box:hover, .feature_section .feature_container .box.active {
-  background-color: #ff8a1d;
+  background-color: #d5bc71;
   color: #ffffff;
 }
 
@@ -438,7 +438,7 @@ a:focus {
 }
 
 .professional_section {
-  background-color: #d1e3ff;
+  background-color: #04a4b4;
 }
 
 .professional_section .row {

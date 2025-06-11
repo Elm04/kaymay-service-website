@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.titre }} - Kaymay Services{% endblock %}
+
+{% block extra_css %}
+<style>
+    .post-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    .post-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .post-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #2c3e50;
+    }
+    .post-meta {
+        color: #7f8c8d;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+    .post-image {
+        width: 100%;
+        height: auto;
+        max-height: 450px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .post-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+        color: #34495e;
+    }
+    .post-content p {
+        margin-bottom: 1.5rem;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        color: #3498db;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    .back-link:hover {
+        color: #2980b9;
+    }
+    @media (max-width: 768px) {
+        .post-title {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="post-container">
+    <article>
+        <header class="post-header">
+            <h1 class="post-title">{{ post.titre }}</h1>
+            <div class="post-meta">
+                Publié le {{ post.date_posted.strftime('%d %B %Y') }} 
+                {% if post.auteur %}par <strong>{{ post.auteur }}</strong>{% endif %}
+            </div>
+            {% if post.image_file %}
+            <img src="{{ url_for('static', filename='uploads/blog/' + post.image_file) }}" 
+                 alt="{{ post.titre }}" 
+                 class="post-image">
+            {% endif %}
+        </header>
+
+        <div class="post-content">
+            {% if post.soustitre %}
+            <h3 class="text-muted">{{ post.soustitre }}</h3>
+            {% endif %}
+            {{ post.contenu|safe }}
+        </div>
+
+        <a href="{{ url_for('views.blog') }}" class="back-link">
+            <i class="fa fa-arrow-left"></i> Retour au blog
+        </a>
+    </article>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Script pour améliorer l'expérience de lecture
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ajoute des ancres aux titres pour permettre le partage de sections
+        document.querySelectorAll('.post-content h2, .post-content h3').forEach(h => {
+            const id = h.textContent.toLowerCase().replace(/\s+/g, '-');
+            h.id = id;
+            h.innerHTML = `<a href="#${id}" class="header-link">${h.innerHTML}</a>`;
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Modifier l'article</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.titre.label }}
+            {{ form.titre(class="form-control") }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.soustitre.label }}
+            {{ form.soustitre(class="form-control") }}
+        </div>
+        
+        {% if form.category %}
+        <div class="form-group">
+            {{ form.category.label }}
+            {{ form.category(class="form-control") }}
+        </div>
+        {% endif %}
+        
+        <div class="form-group">
+            {{ form.contenu.label }}
+            {{ form.contenu(class="form-control", rows=10) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.image.label }}
+            {{ form.image(class="form-control-file") }}
+            {% if post.image_file %}
+            <small class="form-text text-muted">
+                Image actuelle : 
+                <img src="{{ url_for('static', filename='uploads/blog/' + post.image_file) }}" 
+                     style="max-height: 100px;" class="mt-2">
+            </small>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{{ url_for('views.dashboard') }}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}
